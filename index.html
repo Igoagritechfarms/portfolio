@@ -731,7 +731,10 @@ max-width: 50%; /* Adjust width to balance layout */
 .p-brand1 img {
 margin: 5px; /* Adds spacing between images */
 }
-
+.hidden.navbar{
+      transform: translateY(-100%);
+      transition: transform 0.4s ease-in-out;
+}
 
   </style>
 </head>
@@ -748,51 +751,61 @@ margin: 5px; /* Adds spacing between images */
 
 
   <!-- Navbar Start -->
-  <nav class="navbar navbar-expand-lg bg-white navbar-light fixed-top shadow py-lg-0 px-4 px-lg-5">
+  <nav class="navbar navbar-expand-lg bg-white navbar-light fixed-top shadow py-lg-0 px-4 px-lg-5" id="mainNavbar">
     <div class="container-fluid">
       <!-- Mobile Brand -->
       <a href="index.html" class="navbar-brand d-block d-lg-none">
         <h1 class="text-primary fw-bold m-0">CEO Profile</h1>
       </a>
-
+  
       <!-- Navbar Toggler for Mobile -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
       </button>
-
+  
       <!-- Navbar Links -->
       <div class="collapse navbar-collapse justify-content-between py-3 py-lg-0" id="navbarCollapse">
         <ul class="navbar-nav ms-auto py-0">
-          <li class="nav-item">
-            <a href="#home" class="nav-link active">Home</a>
-          </li>
-          <li class="nav-item">
-            <a href="#about" class="nav-link">About</a>
-          </li>
-          <li class="nav-item">
-            <a href="#awards" class="nav-link">Awards</a> <!-- Fixed ID -->
-          </li>
+          <li class="nav-item"><a href="#home" class="nav-link page-link">Home</a></li>
+          <li class="nav-item"><a href="#about" class="nav-link page-link">About</a></li>
+          <li class="nav-item"><a href="#awards" class="nav-link page-link">Awards</a></li>
         </ul>
-
+  
         <!-- Center Profile -->
         <a href="index.html" class="navbar-brand bg-secondary py-2 px-4 mx-3 d-none d-lg-block text-center">
           <h1 class="text-primary fw-bold m-0">Profile</h1>
         </a>
-
+  
         <ul class="navbar-nav me-auto py-0">
-          <li class="nav-item">
-            <a href="#igo-services" class="nav-link">Services</a> <!-- Fixed ID -->
-          </li>
-          <li class="nav-item">
-            <a href="#blog" class="nav-link">Blog</a>
-          </li>
+          <li class="nav-item"><a href="#igo-services" class="nav-link page-link">Services</a></li>
+          <li class="nav-item"><a href="#blog" class="nav-link page-link">Blog</a></li>
         </ul>
       </div>
     </div>
   </nav>
-
-
-  <!-- Navbar End -->
+	  <script>
+    let lastScrollTop = 0;
+    const navbar = document.getElementById("mainNavbar");
+  
+    // Hide navbar when scrolling down, show when scrolling up
+    window.addEventListener("scroll", function () {
+      let currentScroll = window.scrollY;
+      if (currentScroll > lastScrollTop) {
+        navbar.classList.add("hidden-navbar"); // Hide navbar
+      } else {
+        navbar.classList.remove("hidden-navbar"); // Show navbar
+      }
+      lastScrollTop = currentScroll;
+    });
+  
+    // Keep navbar visible when clicking a link
+    document.querySelectorAll(".page-link").forEach((link) => {
+      link.addEventListener("click", function () {
+        navbar.classList.remove("hidden-navbar");
+      });
+    });
+  </script>
+	<!-- Navbar End -->
 
 
   <!-- Header Start -->
