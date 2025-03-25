@@ -732,11 +732,53 @@ max-width: 50%; /* Adjust width to balance layout */
 margin: 5px; /* Adds spacing between images */
 }
 
+/* Navbar hidden on scroll */
+/* Hide navbar when scrolling */
+/* Hide navbar when scrolling down */
 .hidden-navbar {
-      transform: translateY(-100%);
-      transition: transform 0.4s ease-in-out;
-    }
+  transform: translateY(-100%);
+  transition: transform 0.3s ease-in-out;
+}
 
+/* Show navbar when needed */
+.show-navbar {
+  transform: translateY(0);
+}
+
+/* Mobile Navbar - Hidden by default */
+@media (max-width: 991px) {
+  #navbarCollapse {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    display: none; /* Hide menu initially */
+  }
+
+  /* Show navbar when toggled */
+  .show-navbar #navbarCollapse {
+    display: block;
+  }
+
+  /* ☰ Menu Button Styling */
+  .navbar-toggler {
+    display: block;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  /* ❌ Close Button */
+  .btn-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+}
 
   </style>
 </head>
@@ -753,72 +795,87 @@ margin: 5px; /* Adds spacing between images */
 
 
   <!-- Navbar Start -->
+
   <nav class="navbar navbar-expand-lg bg-white navbar-light fixed-top shadow py-lg-0 px-4 px-lg-5" id="mainNavbar">
     <div class="container-fluid">
+      
       <!-- Mobile Brand -->
       <a href="index.html" class="navbar-brand d-block d-lg-none">
         <h1 class="text-primary fw-bold m-0">CEO Profile</h1>
       </a>
   
-      <!-- Navbar Toggler for Mobile -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+      <!-- ☰ Menu Button (Visible in Mobile) -->
+      <button class="navbar-toggler d-lg-none" id="navToggler">
         <span class="navbar-toggler-icon"></span>
       </button>
   
+      <!-- ❌ Close Button (Initially Hidden) -->
+      <button class="btn-close d-none" id="closeNav"></button>
+  
       <!-- Navbar Links -->
-      <div class="collapse navbar-collapse justify-content-between py-3 py-lg-0" id="navbarCollapse">
-        <ul class="navbar-nav ms-auto py-0">
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a href="#home" class="nav-link page-link">Home</a></li>
           <li class="nav-item"><a href="#about" class="nav-link page-link">About</a></li>
           <li class="nav-item"><a href="#awards" class="nav-link page-link">Awards</a></li>
         </ul>
   
-        <!-- Center Profile -->
+        <!-- Center Profile (Desktop Only) -->
         <a href="index.html" class="navbar-brand bg-secondary py-2 px-4 mx-3 d-none d-lg-block text-center">
           <h1 class="text-primary fw-bold m-0">Profile</h1>
         </a>
   
-        <ul class="navbar-nav me-auto py-0">
-          <li class="nav-item"><a href="#igo-services" class="nav-link page-link">Services</a></li>
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a href="#services" class="nav-link page-link">Services</a></li>
           <li class="nav-item"><a href="#blog" class="nav-link page-link">Blog</a></li>
         </ul>
       </div>
     </div>
   </nav>
-  
-  
-
-  
   <script>
     let lastScrollTop = 0;
-    const navbar = document.getElementById("mainNavbar");
-  
-    // Hide navbar when scrolling down, show when scrolling up
-    window.addEventListener("scroll", function () {
-      let currentScroll = window.scrollY;
-      if (currentScroll > lastScrollTop) {
-        navbar.classList.add("hidden-navbar"); // Hide navbar
-      } else {
-        navbar.classList.remove("hidden-navbar"); // Show navbar
-      }
-      lastScrollTop = currentScroll;
-    });
-  
-    // Keep navbar visible when clicking a link
-    document.querySelectorAll(".page-link").forEach((link) => {
-      link.addEventListener("click", function () {
-        navbar.classList.remove("hidden-navbar");
-      });
-    });
+const navbar = document.getElementById("mainNavbar");
+const toggler = document.getElementById("navToggler");
+const closeNav = document.getElementById("closeNav");
+const navbarCollapse = document.getElementById("navbarCollapse");
+
+// Hide navbar when scrolling down
+window.addEventListener("scroll", function () {
+  let currentScroll = window.scrollY;
+  if (currentScroll > lastScrollTop) {
+    navbar.classList.add("hidden-navbar");
+  } else {
+    navbar.classList.remove("hidden-navbar");
+  }
+  lastScrollTop = currentScroll;
+});
+
+// Show navbar when clicking the menu button (☰)
+toggler.addEventListener("click", function () {
+  navbar.classList.add("show-navbar");
+  navbarCollapse.style.display = "block";
+  closeNav.classList.remove("d-none"); // Show X button
+});
+
+// Hide navbar when clicking the close button (❌)
+closeNav.addEventListener("click", function () {
+  navbar.classList.remove("show-navbar");
+  navbarCollapse.style.display = "none";
+  closeNav.classList.add("d-none"); // Hide X button
+});
+
+// Ensure navbar is always visible on desktop
+window.addEventListener("resize", function () {
+  if (window.innerWidth > 991) {
+    navbar.classList.remove("hidden-navbar");
+    navbarCollapse.style.display = "block";
+  } else {
+    navbarCollapse.style.display = "none"; // Hide menu on mobile by default
+  }
+});
+
   </script>
   
-  
-  
-  
-
-  
-
-
   <!-- Navbar End -->
 
 
@@ -900,76 +957,59 @@ margin: 5px; /* Adds spacing between images */
   <!-- About Start -->
   <div class="container-xxl py-6" id="about">
     <div class="container">
-      <div class="row g-5">
-        <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
-          <div class="d-flex align-items-center mb-5">
-            <div class="years flex-shrink-0 text-center me-4">
-              <h3 class="display-1">10+</h3>
-              <h5 class="mb-0">Years</h5>
+        <div class="row g-5">
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="d-flex align-items-center mb-5">
+                    <div class="years flex-shrink-0 text-center me-4">
+                        <h1 class="display-1 mb-0">10</h1>
+                        <h5 class="mb-0">Years</h5>
+                    </div>
+                    <h3 class="lh-base mb-0">of working experience of agriculture</h3>
+                </div>
+                <p class="mb-4">Dr. John Yesudhas – CEO, IGO Group With 10+ years of experience, Dr. John Yesudhas leads IGO Group, driving innovations in polyhouse farming, hydroponics, 
+                  and agritech. An award-winning expert in precision agriculture, he pioneers sustainable farming solutions.</p>
+                <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Project, product & services</p>
+                <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Identifying customers & Consulting</p>
+                <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Converting land space</p>
+                <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Construction of projects</p>
+                <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Exports and distribution of buyback</p>
+                <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Supply of seeds, fertilizer, pesticides, insecticides, fungicides and fumigation chemicals</p>
+                <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>AMC maintenance of crop & Buyback of the produce</p>
+                <a class="btn btn-primary py-3 px-5 mt-3" href="">Read More</a>
             </div>
-            <h6>of working experience of Agriculture</h6>
-          </div>
-          <p class="mb-4">Dr. John Yesudhas – CEO, IGO Group
-            With 10+ years of experience, Dr. John Yesudhas leads IGO Group, driving innovations in polyhouse farming,
-            hydroponics, and agritech. An award-winning expert in precision agriculture, he pioneers sustainable farming
-            solutions.</p>
-          <p class="mb-3"><i class="far fa-check-circle text-primary me-3" style="color: green;"></i>Project, product &
-            services</p>
-          <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Identifying customers & Consulting</p>
-          <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Converting land space</p>
-          <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Outdoor land, indoor space, and rooftop
-            space into highly profitable Agri projects.</p>
-          <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Construction of projects </p>
-          <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Exports and distribution of buyback</p>
-          <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Supply of seeds, fertilizer, pesticides,
-            insecticides, fungicides and fumigation chemicals</p>
-          <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>AMC maintenance of crop & Buyback of the
-            produce</p>
-          <a class="btn btn-primary py-3 px-5 mt-3" href="">Read More</a>
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-6">
+                        <img class="img-fluid rounded" src="img/about-1.jpg" alt="">
+                    </div>
+                    <div class="col-sm-6">
+                        <img class="img-fluid rounded" src="img/about-2.jpg" alt="">
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <h5 class="border-end pe-3 me-3 mb-0">Happy Clients</h5>
+                    <h2 class="text-primary fw-bold mb-0" data-toggle="counter-up">1500</h2>
+                </div>
+                <p class="mb-4">Dr. John Yesudhas – Visionary Leader & CEO, IGO Group Dr. John Yesudhas, with 10+ years of experience, has successfully led IGO Group to serve 5000+ clients and complete 500+ projects across agriculture,
+                   agritech, and microfinance. Under his leadership, IGO Group has become a trusted name in polyhouse farming, hydroponics, vertical farming, indigenous goat breeding, fresh produce delivery, and financial empowerment for small businesses.
+                   With a strong commitment to precision agriculture, sustainability, and innovation,
+                    he has received multiple national awards and partnered with leading institutions to
+                     drive the future of farming. His expertise continues to shape the industry, empowering
+                      farmers, entrepreneurs, and businesses with cutting-edge solutions</p>
+                <div class="d-flex align-items-center mb-3">
+                    <h5 class="border-end pe-3 me-3 mb-0">Projects Completed</h5>
+                    <h2 class="text-primary fw-bold mb-0" data-toggle="counter-up">1500</h2>
+                </div>
+                <p class="mb-0">Dr. John Yesudhas – 1500+ Successful Farming Projects Dr. John Yesudhas, CEO of IGO Group, has led 1,500+ successful farming projects, making IGO a leader in polyhouse, hydroponics,
+                   vertical farming, open cultivation, goat farming, mushroom farming, and agri-engineering
+                    solutions.</p>
+                    <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Polyhouse & Greenhouse Farming – Climate-controlled, high-yield farms</p>
+                <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Hydroponics & Vertical Farming – Soilless farming for maximum productivity</p>
+                <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Open Field Cultivation – High-efficiency crop production</p>
+            </div>
         </div>
-        <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
-          <div class="row g-3 mb-4">
-            <div class="col-sm-6">
-              <img class="img-fluid rounded" src="img/client1.jpg" alt="">
-            </div>
-            <div class="col-sm-6">
-              <img class="img-fluid rounded" src="img/client2.jpg" alt="">
-            </div>
-          </div>
-          <div class="d-flex align-items-center mb-3">
-            <h5 class="border-end pe-3 me-3 mb-0">Happy Clients</h5>
-            <h2 class="text-primary fw-bold mb-0" data-toggle="counter-up" id="text-col">1500</h2>
-          </div>
-          <p class="mb-4">Dr. John Yesudhas – Visionary Leader & CEO, IGO Group
-            Dr. John Yesudhas, with 10+ years of experience, has successfully led IGO Group to serve 5000+ clients and
-            complete 500+ projects across agriculture, agritech, and microfinance. Under his leadership, IGO Group has
-            become a trusted name in polyhouse farming, hydroponics, vertical farming, indigenous goat breeding, fresh
-            produce delivery, and financial empowerment for small businesses.</p>
-          <p class="mb-4">With a strong commitment to precision agriculture, sustainability, and innovation, he has
-            received multiple national awards and partnered with leading institutions to drive the future of farming.
-            His expertise continues to shape the industry, empowering farmers, entrepreneurs, and businesses with
-            cutting-edge solutions</p>
-          <div class="d-flex align-items-center mb-3">
-            <h5 class="border-end pe-3 me-3 mb-0">Projects Completed</h5>
-            <h2 class="text-primary fw-bold mb-0" data-toggle="counter-up"><span id="text-col">1500</span></h2>
-          </div>
-          <p class="mb-0">Dr. John Yesudhas – 1500+ Successful Farming Projects
-            Dr. John Yesudhas, CEO of IGO Group, has led 1,500+ successful farming projects, making IGO a leader in
-            polyhouse, hydroponics, vertical farming, open cultivation, goat farming, mushroom farming, and
-            agri-engineering solutions.
-          </p>
-          <p class="mb-3"><i class="far fa-check-circle text-primary me-3" style="color: green;"></i>Polyhouse &
-            Greenhouse Farming – Climate-controlled, high-yield farms</p>
-          <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Hydroponics & Vertical Farming – Soilless
-            farming for maximum productivity</p>
-          <p class="mb-3"><i class="far fa-check-circle text-primary me-3"></i>Open Field Cultivation – High-efficiency
-            crop production</p>
-
-
-        </div>
-      </div>
     </div>
-  </div>
+</div>
   <!-- About End -->
 
 
